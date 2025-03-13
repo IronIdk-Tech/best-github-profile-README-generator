@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Profile README Generator</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --card-bg: #f5f5f5;
+            --primary-color: #6e5494;
+            --border-color: #e1e4e8;
+        }
+        
+        .dark-mode {
+            --bg-color: #0d1117;
+            --text-color: #c9d1d9;
+            --card-bg: #21262d;
+            --primary-color: #8b6fcb;
+            --border-color: #30363d;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 100;
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input[type="text"], 
+        input[type="url"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .badge-selection {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .badge-item {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+        }
+        
+        .badge-item.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(110, 84, 148, 0.1);
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        
+        .section-list {
+            margin-top: 15px;
+        }
+        
+        .section-item {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .output-container {
+            position: relative;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        #output {
+            width: 100%;
+            min-height: 300px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+        
+        .tab:first-child {
+            border-radius: 5px 0 0 5px;
+        }
+        
+        .tab:last-child {
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .tab.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .preview {
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+            background-color: var(--card-bg);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle">🌙 Dark Mode</button>
+    
+    <div class="container">
+        <header>
+            <h1>GitHub Profile README Generator</h1>
+            <p>Create an awesome GitHub profile README with just a few clicks!</p>
+        </header>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="editor">Editor</div>
+            <div class="tab" data-tab="preview">Preview</div>
+        </div>
+        
+        <div id="editorTab">
+            <div class="card">
+                <h2>Basic Information</h2>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" placeholder="John Doe">
+                </div>
+                
+                <div class="form-group">
+                    <label for="subtitle">Subtitle / Tagline</label>
+                    <input type="text" id="subtitle" placeholder="Full-stack Developer | JavaScript Enthusiast">
+                </div>
+                
+                <div class="form-group">
+                    <label for="aboutMe">About Me</label>
+                    <textarea id="aboutMe" placeholder="I'm a passionate developer with a love for clean code and innovative solutions..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" placeholder="San Francisco, CA">
+                </div>
+                
+                <div class="form-group">
+                    <label for="website">Website/Portfolio</label>
+                    <input type="url" id="website" placeholder="https://johndoe.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="pronouns">Pronouns (Optional)</label>
+                    <input type="text" id="pronouns" placeholder="he/him">
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Social Badges</h2>
+                <p>Select the social platforms you want to include:</p>
+                
+                <div class="badge-selection">
+                    <div class="badge-item" data-badge="linkedin">
+                        <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Badge"/>
+                    </div>
+                    <div class="badge-item" data-badge="twitter">
+                        <img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white" alt="Twitter Badge"/>
+                    </div>
+                    <div class="badge-item" data-badge="instagram">
+                        <img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" alt="Instagram Badge"/>
+                    </div>
+                    <div class="badge-item" data-badge="medium">
+                        <img src="https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white" alt="Medium Badge"/>
+                    </div>
+                    <div class="badge-item" data-badge="dribbble">
+                        <img src="https://img.shields.io/badge/Dribbble-EA4C89?style=for-the-badge&logo=dribbble&logoColor=white" alt="Dribbble Badge"/>
+                    </div>
+                    <div class="badge-item" data-badge="behance">
+                        <img src="https://img.shields.io/badge/Behance-0054F7?style=for-the-badge&logo=behance&logoColor=white" alt="Behance Badge"/>
+                    </div>
+                    <div class="badge-item" data-badge="stackoverflow">
+                        <img src="https://img.shields.io/badge/Stack_Overflow-FE7A16?style=for-the-badge&logo=stack-overflow&logoColor=white" alt="Stack Overflow Badge"/>
+                    </div>
+                    <div class="badge-item" data-badge="youtube">
+                        <img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube Badge"/>
+                    </div>
+                    <div class="badge-item" data-badge="dev">
+                        <img src="https://img.shields.io/badge/dev.to-0A0A0A?style=for-the-badge&logo=dev.to&logoColor=white" alt="Dev.to Badge"/>
+                    </div>
+                    <div class="badge-item" data-badge="github">
+                        <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Badge"/>
+                    </div>
+                    <div class="badge-item" data-badge="hackerrank">
+                        <img src="https://img.shields.io/badge/-Hackerrank-2EC866?style=for-the-badge&logo=HackerRank&logoColor=white" alt="HackerRank Badge"/>
+                    </div>
+                    <div class="badge-item" data-badge="gitlab">
+                        <img src="https://img.shields.io/badge/GitLab-330F63?style=for-the-badge&logo=gitlab&logoColor=white" alt="GitLab Badge"/>
+                    </div>
+                </div>
+                
+                <div class="form-group" style="margin-top: 20px;">
+                    <label>Social Links</label>
+                    <div id="socialLinks">
+                        <!-- Social links will be added dynamically here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Skills & Technologies</h2>
+                <div class="form-group">
+                    <label>Select your skills:</label>
+                    <div class="badge-selection">
+                        <div class="badge-item" data-badge="javascript">
+                            <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript Badge"/>
+                        </div>
+                        <div class="badge-item" data-badge="typescript">
+                            <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript Badge"/>
+                        </div>
+                        <div class="badge-item" data-badge="python">
+                            <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python Badge"/>
+                        </div>
+                        <div class="badge-item" data-badge="java">
+                            <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java Badge"/>
+                        </div>
+                        <div class="badge-item" data-badge="cpp">
+                            <img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" alt="C++ Badge"/>
+                        </div>
+                        <div class="badge-item" data-badge="csharp">
+                            <img src="https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white" alt="C# Badge"/>
+                        </div>
+                        <div class="badge-item" data-badge="golang">
+                            <img src="https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white" alt="Go Badge"/>
+                        </div>
+                        <div class="badge-item" data-badge="php">
+                            <img src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP Badge"/>
+                        </div>
+                        <div class="badge-item" data-badge="ruby">
+                            <img src="https://img.shields.io/badge/Ruby-CC342D?style=for-the-badge&logo=ruby&logoColor=white" alt="Ruby Badge"/>
+                        </div>
+                        <div class="badge-item" data-badge="kotlin">
+                            <img src="https://img.shields.io/badge/Kotlin-0095D5?style=for-the-badge&logo=kotlin&logoColor=white" alt="Kotlin Badge"/>
+                        </div>
+                        <div class="badge-item" data-badge="react">
+                            <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React Badge"/>
+                        </div>
+                        <div class="badge-item" data-badge="vue">
+                            <img src="https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vue.js&logoColor=4FC08D" alt="Vue.js Badge"/>
+                        </div>
+                        <div class="badge-item" data-badge="angular">
+                            <img src="https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white" alt="Angular Badge"/>
+                        </div>
+                        <div class="badge-item" data-badge="nodejs">
+                            <img src="https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js Badge"/>
+                        </div>
+                        <div class="badge-item" data-badge="django">
+                            <img src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django Badge"/>
+                        </div>
+                        <div class="badge-item" data-badge="mongodb">
+                            <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB Badge"/>
+                        </div>
+                        <div class="badge-item" data-badge="postgresql">
+                            <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL Badge"/>
+                        </div>
+                        <div class="badge-item" data-badge="mysql">
+                            <img src="https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL Badge"/>
+                        </div>
+                        <div class="badge-item" data-badge="aws">
+                            <img src="https://img.shields.io/badge/Amazon_AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white" alt="AWS Badge"/>
+                        </div>
+                        <div class="badge-item" data-badge="docker">
+                            <img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Badge"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Sections</h2>
+                <p>Select the sections you want to include in your README:</p>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="currentlyWorking" checked>
+                        Currently Working On
+                    </label>
+                    <input type="text" id="currentlyWorkingText" placeholder="I'm currently working on an exciting project..." style="margin-top: 5px;">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="currentlyLearning" checked>
+                        Currently Learning
+                    </label>
+                    <input type="text" id="currentlyLearningText" placeholder="I'm currently learning React Native..." style="margin-top: 5px;">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="lookingToCollaborate" checked>
+                        Looking to Collaborate On
+                    </label>
+                    <input type="text" id="lookingToCollaborateText" placeholder="I'm looking to collaborate on open source projects..." style="margin-top: 5px;">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="lookingForHelp" checked>
+                        Looking for Help With
+                    </label>
+                    <input type="text" id="lookingForHelpText" placeholder="I'm looking for help with machine learning algorithms..." style="margin-top: 5px;">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="askMeAbout" checked>
+                        Ask Me About
+                    </label>
+                    <input type="text" id="askMeAboutText" placeholder="Ask me about JavaScript, React, NodeJS..." style="margin-top: 5px;">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="funFact" checked>
+                        Fun Fact
+                    </label>
+                    <input type="text" id="funFactText" placeholder="I love to play chess in my free time..." style="margin-top: 5px;">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="githubStats" checked>
+                        GitHub Stats
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="profileViews" checked>
+                        Profile Views Counter
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="topLanguages" checked>
+                        Top Languages
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="streakStats" checked>
+                        GitHub Streak Stats
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="trophies" checked>
+                        GitHub Trophies
+                    </label>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Support Section</h2>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="buyMeCoffee" checked>
+                        Buy Me A Coffee
+                    </label>
+                    <input type="text" id="buyMeCoffeeUsername" placeholder="Your Buy Me a Coffee username" style="margin-top: 5px;">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="kofi" checked>
+                        Ko-fi
+                    </label>
+                    <input type="text" id="kofiUsername" placeholder="Your Ko-fi username" style="margin-top: 5px;">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="patreon">
+                        Patreon
+                    </label>
+                    <input type="text" id="patreonUsername" placeholder="Your Patreon username" style="margin-top: 5px;">
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Additional Options</h2>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="darkModeToggle" checked>
+                        Include Dark Mode Toggle
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="visitorsBadge" checked>
+                        Add Visitors Badge
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="latestBlogs">
+                        Latest Blog Posts
+                    </label>
+                    <input type="text" id="mediumOrDevUsername" placeholder="Your Medium or Dev.to username" style="margin-top: 5px;">
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="recentActivity">
+                        Recent GitHub Activity
+                    </label>
+                </div>
+            </div>
+            
+            <button id="generateBtn">Generate README</button>
+        </div>
+        
+        <div id="previewTab" style="display: none;">
+            <div class="card">
+                <h2>Your README Code</h2>
+                <div class="output-container">
+                    <button class="copy-btn" id="copyBtn">Copy</button>
+                    <textarea id="output" readonly></textarea>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Preview</h2>
+                <div id="previewContainer" class="preview"></div>
+            </div>
+            
+            <button id="backToEditor">Back to Editor</button>
+        </div>
+    </div>
+    
+    <script>
+        // Theme toggling
+        const themeToggle = document.getElementById('themeToggle');
+        let darkMode = false;
+        
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            darkMode = !darkMode;
+            themeToggle.textContent = darkMode ? '☀️ Light Mode' : '🌙 Dark Mode';
+        });
+        
+        // Tab switching
+        const tabs = document.querySelectorAll('.tab');
+        const editorTab = document.getElementById('editorTab');
+        const previewTab = document.getElementById('previewTab');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                if (tab.dataset.tab === 'editor') {
+                    editorTab.style.display = 'block';
+                    previewTab.style.display = 'none';
+                } else {
+                    editorTab.style.display = 'none';
+                    previewTab.style.display = 'block';
+                }
+            });
+        });
+        
+        document.getElementById('backToEditor').addEventListener('click', () => {
+            tabs[0].click();
+        });
+        
+        // Badge selection
+        const badgeItems = document.querySelectorAll('.badge-item');
+        const socialLinksContainer = document.getElementById('socialLinks');
+        
+        badgeItems.forEach(badge => {
+            badge.addEventListener('click', () => {
+                badge.classList.toggle('selected');
+                
+                // Only handle social badges
+                if (badge.dataset.badge && ['linkedin', 'twitter', 'instagram', 'medium', 'dribbble', 'behance', 'stackoverflow', 'youtube', 'dev', 'github', 'hackerrank', 'gitlab'].includes(badge.dataset.badge)) {
+                    updateSocialLinks();
+                }
+            });
+        });
+        
+        function updateSocialLinks() {
+            socialLinksContainer.innerHTML = '';
+            
+            document.querySelectorAll('.badge-item.selected').forEach(badge => {
+                if (['linkedin', 'twitter', 'instagram', 'medium', 'dribbble', 'behance', 'stackoverflow', 'youtube', 'dev', 'github', 'hackerrank', 'gitlab'].includes(badge.dataset.badge)) {
+                    const socialName = badge.dataset.badge.charAt(0).toUpperCase() + badge.dataset.badge.slice(1);
+                    const linkGroup = document.createElement('div');
+                    linkGroup.className = 'form-group';
+                    linkGroup.style.marginTop = '10px';
+                    
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.id = `${badge.dataset.badge}Link`;
+                    input.placeholder = `Your ${socialName} URL or username`;
+                    
+                    const label = document.createElement('label');
+                    label.textContent = `${socialName} Link`;
+                    label.htmlFor = input.id;
+                    
+                    linkGroup.appendChild(label);
+                    linkGroup.appendChild(input);
+                    socialLinksContainer.appendChild(linkGroup);
+                }
+            });
+        }
+        
+        // Generate README
+        const generateBtn = document.getElementById('generateBtn');
+        const output = document.getElementById('output');
+        const copyBtn = document.getElementById('copyBtn');
+        const previewContainer = document.getElementById('previewContainer');
+        
+        generateBtn.addEventListener('click', () => {
+            const name = document.getElementById('name').value || 'Your Name';
+            const subtitle = document.getElementById('subtitle').value || 'Developer | Designer | Creator';
+            const aboutMe = document.getElementById('aboutMe').value || 'I am a passionate developer with a love for coding and problem-solving.';
+            const location = document.getElementById('location').value;
+            const website = document.getElementById('website').value;
+            const pronouns = document.getElementById('pronouns').value;
+            
+            // Get selected social badges
+            const selectedSocials = [];
+            document.querySelectorAll('.badge-item.selected').forEach(badge => {
+                if (['linkedin', 'twitter', 'instagram', 'medium', 'dribbble', 'behance', 'stackoverflow', 'youtube', 'dev', 'github', 'hackerrank', 'gitlab'].includes(badge.dataset.badge)) {
+                    const socialLink = document.getElementById(`${badge.dataset.badge}Link`);
+                    if (socialLink && socialLink.value) {
+                        selectedSocials.push({
+                            name: badge.dataset.badge,
+                            link: socialLink.value,
+                            badge: badge.querySelector('img').outerHTML
+                        });
+                    }
+                }
+            });
+            
+            // Get selected tech badges
+            const selectedTech = [];
+            document.querySelectorAll('.badge-item.selected').forEach(badge => {
+                if (['javascript', 'typescript', 'python', 'java', 'cpp', 'csharp', 'golang', 'php', 'ruby', 'kotlin', 'react', 'vue', 'angular', 'nodejs', 'django', 'mongodb', 'postgresql', 'mysql', 'aws', 'docker'].includes(badge.dataset.badge)) {
+                    selectedTech.push({
+                        name: badge.dataset.badge,
+                        badge: badge.querySelector('img').outerHTML
+                    });
+                }
+            });
+            
+            // Get section content
+            const sections = {
+                currentlyWorking: {
+                    enabled: document.getElementById('currentlyWorking').checked,
+                    text: document.getElementById('currentlyWorkingText').value || "I'm currently working on something cool!"
+                },
+                currentlyLearning: {
+                    enabled: document.getElementById('currentlyLearning').checked,
+                    text: document.getElementById('currentlyLearningText').value || "I'm currently learning new technologies"
+                },
+                lookingToCollaborate: {
+                    enabled: document.getElementById('lookingToCollaborate').checked,
+                    text: document.getElementById('lookingToCollaborateText').value || "I'm looking to collaborate on open source projects"
+                },
+                lookingForHelp: {
+                    enabled: document.getElementById('lookingForHelp').checked,
+                    text: document.getElementById('lookingForHelpText').value || "I'm looking for help with advanced topics"
+                },
+                askMeAbout: {
+                    enabled: document.getElementById('askMeAbout').checked,
+                    text: document.getElementById('askMeAboutText').value || "Ask me about anything tech related"
+                },
+                funFact: {
+                    enabled: document.getElementById('funFact').checked,
+                    text: document.getElementById('funFactText').value || "Fun fact: I love to code!"
+                }
+            };
+            
+            // Support options
+            const support = {
+                buyMeCoffee: {
+                    enabled: document.getElementById('buyMeCoffee').checked,
+                    username: document.getElementById('buyMeCoffeeUsername').value || 'yourusername'
+                },
+                kofi: {
+                    enabled: document.getElementById('kofi').checked,
+                    username: document.getElementById('kofiUsername').value || 'yourusername'
+                },
+                patreon: {
+                    enabled: document.getElementById('patreon').checke
