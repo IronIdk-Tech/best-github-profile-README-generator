@@ -1,0 +1,337 @@
+:root {
+  --primary-color: #2563eb;
+  --secondary-color: #60a5fa;
+  --accent-color: #3b82f6;
+  --text-color: #1f2937;
+  --text-secondary: #4b5563;
+  --background-color: #ffffff;
+  --background-secondary: #f3f4f6;
+  --border-color: #e5e7eb;
+  --success-color: #10b981;
+  --error-color: #ef4444;
+}
+
+[data-theme="dark"] {
+  --primary-color: #3b82f6;
+  --secondary-color: #60a5fa;
+  --accent-color: #2563eb;
+  --text-color: #f9fafb;
+  --text-secondary: #e5e7eb;
+  --background-color: #111827;
+  --background-secondary: #1f2937;
+  --border-color: #374151;
+  --success-color: #10b981;
+  --error-color: #ef4444;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  transition: all 0.3s ease;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+header h1 {
+  font-size: 2rem;
+  color: var(--primary-color);
+}
+
+.theme-switch-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.theme-switch {
+  display: inline-block;
+  height: 24px;
+  position: relative;
+  width: 48px;
+  margin-right: 10px;
+}
+
+.theme-switch input {
+  display: none;
+}
+
+.slider {
+  background-color: var(--text-secondary);
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: .4s;
+}
+
+.slider:before {
+  background-color: var(--background-color);
+  bottom: 4px;
+  content: "";
+  height: 16px;
+  left: 4px;
+  position: absolute;
+  transition: .4s;
+  width: 16px;
+}
+
+input:checked + .slider {
+  background-color: var(--primary-color);
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+@media (max-width: 992px) {
+  main {
+      grid-template-columns: 1fr;
+  }
+}
+
+.form-container, .preview-container {
+  background-color: var(--background-secondary);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+} 
+
+.form-section {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.form-section h2 {
+  margin-bottom: 15px;
+  color: var(--accent-color);
+  font-size: 1.4rem;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group img{
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+  height: 1.5rem;
+  width: 1.5rem
+}
+
+.form-group label {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 5px;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+input[type="text"],
+input[type="url"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="url"]:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.social-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.social-input {
+  margin-top: 5px;
+}
+
+.tech-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.category h3 {
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.tech-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tech-options label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.tech-options input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.section-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.section-options label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.section-options input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.project-entry {
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: var(--background-color);
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-primary, .btn-secondary {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-color);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--background-secondary);
+}
+
+.preview-window {
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
+  height: 500px;
+  overflow-y: auto;
+}
+
+.markdown-body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.markdown-body p {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markdown-body img {
+  max-width: 100%;
+  box-sizing: content-box;
+  background-color: transparent;
+}
+
+footer {
+  text-align: center;
+  margin-top: 50px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+footer a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
